@@ -1,66 +1,74 @@
-var Modi = {
-            
-            rules: [],
-            defaultInitName: 'init',
+;(function(){
 
-            addRule: function( options ) {
-                this.rules.push( options );
-            },
+    "use strict";
 
-            _passRules: function( options ) {
+    var Modi = {
 
-                var pass = 0;
+        rules: [],
+        defaultInitName: 'init',
 
-                if( options.matchSelector ) {
-                    pass +=  +!$( options.matchSelector ).length;
-                }
+        addRule: function( options ) {
+            this.rules.push( options );
+        },
 
-                if( options.matchUrl ) {
-                    
-                    var rMatchUrl = options.matchUrl;
+        _passRules: function( options ) {
 
-                    if( typeof rMatchUrl === 'string' ) {
-                        rMatchUrl = new RegExp( rMatchUrl , "g");
-                    }
+            var pass = 0;
 
-                    if( !rMatchUrl.test( window.location.href ) ) {
-                        pass++;
-                    }
-
-                }
-
-                if( typeof options.rule === 'function' ) {
-                    pass += +!options.rule();
-                }
-
-                return !pass;
-            },
-
-            _hasModule: function( rule ) {
-                return !!window[ rule.moduleName ];
-            },
-            
-            execute: function(){
-
-                var rule = {};
-                
-                for( var idxRule in this.rules ) {
-                            
-                        if ( this.rules.hasOwnProperty( idxRule ) ) {
-
-                                rule = this.rules[idxRule];
-            
-                                if( this._passRules( rule ) ) {
-            
-                                    if( typeof rule.callback === "function" ) {
-                                        rule.callback();
-                                    } else if( this._hasModule( rule ) ) {
-                                        window[ rule.moduleName ][ this.defaultInitName ]();
-                                    }
-                                                         
-                                }
-                        }       
-
-                }
+            if( options.matchSelector ) {
+                pass +=  +!$( options.matchSelector ).length;
             }
-        };
+
+            if( options.matchUrl ) {
+
+                var rMatchUrl = options.matchUrl;
+
+                if( typeof rMatchUrl === 'string' ) {
+                    rMatchUrl = new RegExp( rMatchUrl , "g");
+                }
+
+                if( !rMatchUrl.test( window.location.href ) ) {
+                    pass++;
+                }
+
+            }
+
+            if( typeof options.rule === 'function' ) {
+                pass += +!options.rule();
+            }
+
+            return !pass;
+        },
+
+        _hasModule: function( rule ) {
+            return !!window[ rule.moduleName ];
+        },
+
+        execute: function(){
+
+            var rule = {};
+
+            for( var idxRule in this.rules ) {
+
+                if ( this.rules.hasOwnProperty( idxRule ) ) {
+
+                    rule = this.rules[idxRule];
+
+                    if( this._passRules( rule ) ) {
+
+                        if( typeof rule.callback === "function" ) {
+                            rule.callback();
+                        } else if( this._hasModule( rule ) ) {
+                            window[ rule.moduleName ][ this.defaultInitName ]();
+                        }
+
+                    }
+                }
+
+            }
+        }
+    };
+
+    window.Modi = Modi;
+
+})();
