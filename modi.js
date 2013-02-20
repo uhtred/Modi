@@ -45,18 +45,21 @@ var Modi = {
                 var rule = {};
                 
                 for( var idxRule in this.rules ) {
+                            
+                        if ( this.rules.hasOwnProperty( idxRule ) ) {
 
-                    rule = this.rules[idxRule];
-
-                    if( this._passRules( rule ) ) {
-
-                        if( typeof rule.callback === "function" ) {
-                            rule.callback();
-                        } else if( this._hasModule( rule ) ) {
-                            window[ rule.moduleName ][ this.defaultInitName ]();
-                        }
-                                             
-                    }
+                                rule = this.rules[idxRule];
+            
+                                if( this._passRules( rule ) ) {
+            
+                                    if( typeof rule.callback === "function" ) {
+                                        rule.callback();
+                                    } else if( this._hasModule( rule ) ) {
+                                        window[ rule.moduleName ][ this.defaultInitName ]();
+                                    }
+                                                         
+                                }
+                        }       
 
                 }
             }
